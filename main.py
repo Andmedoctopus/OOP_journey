@@ -1,47 +1,26 @@
 from PyParser import JourneyParser
-
-
 import gender
+from human import Woman, Man, Human
 
 
-class Human:
-    HUMAN_MAX_AGE = 100
+class HumanFabric:
+    def __init__(self, data):
+        self.data = data
 
-    def __init__(self, name, age):
-        self.name = name
-        self.age = age
+    @staticmethod
+    def make_human(ary):
+        name, age, gender = ary[0:3]
+        return (Man if gender == 'Male' else Woman)(name=name, age=int(age))
 
-    def lifetime_age(self):
-        return self.__class__.HUMAN_MAX_AGE - self.age_decrement
-
-    def is_man(self):
-        return True if self.gender == 'male' else False
-
-    def is_woman(self):
-        return not self.is_man
-
-    def __str__(self):
-        return '<#{}: name={} age={} gender={}>'.format(str(self.__class__), self.name, self.age, self.gender)
+    def make_humans(self):
+        return list(map(self.make_human, self.data))
 
 
-class Man(Human):
-    def __init__(self, name, age):
-        super().__init__(name, age)
-        self.gender = gender.Male()
-        self.age_decrement = 10
+parser = JourneyParser(filepath='tmp/input_data.csv')
+data = parser()
 
+humans = HumanFabric(data=data).make_humans()
+print(humans)
 
-class Woman(Human):
-    def __init__(self, name, age):
-        super().__init__(name=name, age=age)
-        self.gender = gender.Female()
-        self.age_decrement = 20
-
-
-man = Man(name='John', age=21)
-women = Woman(name='John', age=21)
-
-pars_var = JourneyParser(filepath='./tmp/test1.csv')
-print(pars_var.check_filepath())
-
-print(pars_var.get_info_from_file())
+human = HumanFabric.make_human(ary=data[0])
+print(human)
