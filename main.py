@@ -1,3 +1,6 @@
+from PyParser import JourneyParser
+
+
 import gender
 
 
@@ -37,7 +40,8 @@ class Woman(Human):
 
 man = Man(name='John', age=21)
 women = Woman(name='John', age=21)
-print(man.lifetime_age())
-print(women.lifetime_age())
 
+pars_var = JourneyParser(filepath='./tmp/test1.csv')
+print(pars_var.check_filepath())
 
+print(pars_var.get_info_from_file())
